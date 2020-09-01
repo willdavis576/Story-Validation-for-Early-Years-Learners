@@ -1,0 +1,3 @@
+pyinstaller
+pyodbc
+pypiwin32
