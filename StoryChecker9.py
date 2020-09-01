@@ -119,17 +119,19 @@ def storyChecker(string):
     highestNo = 0
     outputMessage = ''
     counter = 0
-    conn_str = ( #FROM HERE
-        r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-        r'DBQ=' + file + ';' #FILE LOCATION OF THE DATABASE
-        )
+    conn_str = (r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'r'DBQ=' + file + ';')
     try:
         cnxn = pyodbc.connect(conn_str)
-        crsr = cnxn.cursor()
-    except:
+
+    except Exception as e:
+        print(e)
         messagebox.showinfo("ERROR", "You didn't select a database")
 
-
+    try:
+	    crsr = cnxn.cursor()
+    except:
+	    messagebox.showinfo("ERROR", "You didn't select a database")
+		
     crsr.execute('SELECT T_WordDatabase.Word, T_WordDatabase.[Week no] FROM T_WordDatabase ORDER BY T_WordDatabase.Word;') #SETTING UP THE DATABASE QUERY
 
     string1 = ''
@@ -342,6 +344,7 @@ def openFunc():
             if file[i] != '/':
                 file1 = file1 + file[i]
     file = file1
+
 
 def printFunc():
     global entry
