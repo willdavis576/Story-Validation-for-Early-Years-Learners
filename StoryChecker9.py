@@ -4,6 +4,7 @@ from tkinter import messagebox
 from tkinter import BOTH, END, LEFT
 from tkinter import filedialog
 from tkinter import *
+from win32api import GetSystemMetrics
 
 txtInput = ''
 text =''
@@ -131,7 +132,7 @@ def storyChecker(string):
 	    crsr = cnxn.cursor()
     except:
 	    messagebox.showinfo("ERROR", "You didn't select a database")
-		
+
     crsr.execute('SELECT T_WordDatabase.Word, T_WordDatabase.[Week no] FROM T_WordDatabase ORDER BY T_WordDatabase.Word;') #SETTING UP THE DATABASE QUERY
 
     string1 = ''
@@ -256,9 +257,7 @@ def storyChecker(string):
     for i in range(len(leftOver)):
         leftOverMessage = leftOverMessage + leftOver[i] + "\n"
 
-
-
-    finalOutput = "The maximum week for this story is Week " + str(highestNo) + " caused by the word '" + highestWord + "'\n" + highFreq + "\n" + tricky + "\n\n" + outputMessage + "\n" + leftOverMessage
+    finalOutput = "The maximum week for this story is Week " + str(highestNo) + " caused by the word '" + highestWord + "'\n" + highFreq + "\n" + tricky + "\n\n" + leftOverMessage + "\n" + outputMessage
 
 def main():
     global txtInput
@@ -279,10 +278,10 @@ def main():
     outputPrint = ''
     root = tk.Tk()
     root.title("Story Week Checker")
-    w = 1000
-    h = 800
-    x = 50
-    y = 100
+    w = GetSystemMetrics(0)/2.5
+    h = GetSystemMetrics(1)/2
+    x = GetSystemMetrics(0)/10
+    y = GetSystemMetrics(1)/5
     root.geometry("%dx%d+%d+%d" % (w, h, x, y))
     frame = tk.Frame(root, bg='white')
     frame.pack(fill='both', expand='yes')
@@ -318,16 +317,22 @@ def main():
     frame2 = tk.Frame(root2, bg='white', takefocus=TRUE)
     frame2.pack(fill='both', expand='yes')
     root2.title("Check Report")
-    w = 800
-    h = 800
-    x = 50
-    y = 100
+    w = GetSystemMetrics(0)/2.5
+    h =  GetSystemMetrics(1)/2
+    x = GetSystemMetrics(0)/2
+    y = GetSystemMetrics(1)/5
     root2.geometry("%dx%d+%d+%d" % (w, h, x, y))
     frame2.update()
     scrollbar = tk.Scrollbar(frame2)
-    report = tk.Text(frame2, font=("Century Gothic", 15), width=68, height=32,  yscrollcommand=scrollbar.set)
-    report.pack()
-    report.place(x=20, y=10)
+    report = tk.Text(frame2, font=("Century Gothic", 15), width=68, height=32)
+
+    # report.place(x=20, y=10)
+    yscrollbar=tk.Scrollbar(frame2, orient=VERTICAL, command=report.yview)
+    yscrollbar.pack(side=RIGHT, fill=Y)
+    report["yscrollcommand"] = yscrollbar.set
+    report.pack(side=LEFT, fill=BOTH, expand = YES)
+    # report = tk.Text(frame2, font=("Century Gothic", 15), width=root2.winfo_height(), height=root2.winfo_height(),  yscrollcommand=scrollbar.set)
+
 
     root.mainloop()
 
@@ -368,9 +373,6 @@ def getOption():
 if __name__ == '__main__':
     main()
 
-
-
-# can't
-# scrolling on report box
-# ascending weeks
-# main report conclusion at the top
+ # window spawn locations
+ # word not in database order
+ # dynamic window resizing
